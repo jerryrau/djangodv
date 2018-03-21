@@ -1,0 +1,183 @@
+- sudo apt-get update 升級版本
+
+- sudo apt-get install python3-pip (安裝python3)
+
+- pip3 install --upgrade pip (更新pip3)
+
+- sudo pip3 install virtualenv (pip3安裝虛擬環境)
+
+- 到目錄新增myproject 再cd myproject
+
+- virtualenv VENV (myproject中開虛擬環境)--安裝package的地方
+
+- 在myproject中進入[source VENV/bin/activate} (抓檔案入虛擬環境)
+
+- pip install django 安裝django
+
+- 進入part1
+
+- django-admin startproject mysite 開project
+
+- cd mysite 
+
+- python manage.py startapp polls 開好新app polls
+
+- 去polls/view.py中改資料
+
+- polls中開一個 urls.py 貼上資料
+
+- mysite/urls.py 覆蓋資料
+
+- python manage.py makemigrations
+
+- python manage.py migrate
+
+- python manage by runserver
+
+  [part 2]
+
+- polls/models.py 中貼上資料 
+
+- mysite/settings.py 中增加 'polls.apps.PollsConfig' [才能考慮polls]
+
+  [回碼頁}
+ 
+- crtl c 離開
+
+- python manage.py makemigrations
+
+- python manage.py migrate
+
+- python manage.py shell(用來新增資料)
+
+- from polls.models import Question, Choice  (導入剛寫模組)
+
+- from django.utils import timezone (抓"timezone"這個package)
+
+- q = Question(question_text="What's new?", pub_date=timezone.now()) 創造物件q [文字檔what's now 時間為現在時間]
+
+- q.save() 儲存
+
+- q.id (一定 = 1 此時只有 一個id)  
+
+----------------------------------------
+- 當q.id不為1，q = Question.objects.all() [把所有物件給q]
+
+- q.delete()
+----------------------------------------
+- q.question_text (跑文字)
+
+- q.pub_date (跑時間)
+
+- q.question_text = "What's up?" 改文字
+
+- q.save()
+
+- Question.objects.all() (列出物件名字)
+
+- polls/models.py中修改
+
+- 前段覆蓋
+- [Question]加後面 
+- [Choice]加後面
+
+- [Question]後面再加 
+
+ def was_published_recently(self):
+     return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+- 前段再覆蓋
+import datetime
+
+from django.db import models
+from django.utils import timezone
+
+- 離開
+
+- python manage.py makemigrations
+
+- python manage.py migrate
+
+- python manage.py shell
+
+- from polls.models import Question, Choice (再導入)
+
+- Question.objects.all() (物件名已改變,下列回傳了question名稱)
+
+  ps.  def __str__(self):
+        return self.question_text 
+
+- Question.objects.filter(id=1) 叫出id=1物件
+
+- from django.utils import timezone
+
+- current_year = timezone.now().year
+
+- Question.objects.get(pub_date__year=current_year) 
+
+  把等於現在這個年分物件叫出 current_year用系統(timezone.now)的方式把時間叫出，再去取他的年份，把question中發表日是2018的都找出
+
+- q = Question.objects.get(pk=1)
+
+- q.was_published_recently() 系統時間跟我給時間誤差是否在一天內
+
+- q = Question.objects.get(pk=1)
+
+- q.choice_set.all() 查question有沒有choice
+
+- q.choice_set.create(choice_text='Not much', votes=0)
+
+- q.choice_set.create(choice_text='The sky', votes=0)
+
+- c = q.choice_set.create(choice_text='Just hacking again', votes=0)
+
+  創三個choice
+
+- c.question 查choice對應的question
+
+- q.choice_set.all() question對應的choice
+
+- q.choice_set.count() 數量
+
+- Choice.objects.filter(question__pub_date__year=current_year)
+  
+  question date是今年的都抓出
+
+- c = q.choice_set.filter(choice_text__startswith='Just hacking')
+
+- c.delete()
+  抓出Just hacking開頭的刪掉
+
+- 離開
+
+- python manage.py createsuperuser
+
+- python manage.py runserver
+
+- http://127.0.0.1:8000/admin/
+
+- mysite/polls/admin
+
+- 覆蓋資料
+
+[part3]
+
+- polls/views.py 增加三個funcion (非覆蓋)
+
+- polls/urls.py 增加三個超連結 [之後打開才能進去 注意第一個重疊]
+
+- polls/view.py 改index funtion (覆蓋) 同時注意上面兩條funtions要正確
+
+- polls/templates/polls/index.html 新增資料夾，index.html貼上
+
+- 去升級template
+
+- polls/view.py 覆蓋 index
+
+- 增加 from .models import Question 讓view能拿到資料庫
+
+- 
+
+- 
+
+- 
