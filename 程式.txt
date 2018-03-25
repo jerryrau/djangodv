@@ -1,4 +1,4 @@
-- sudo apt-get update 升級版本
+so- sudo apt-get update 升級版本
 
 - sudo apt-get install python3-pip (安裝python3)
 
@@ -36,8 +36,7 @@
 
   [part 2]
 
-- polls/models.py 中貼上資料 
-
+- polls/models.py 中貼上資料p
 - mysite/settings.py 中增加 'polls.apps.PollsConfig' [才能考慮polls]
 
   [回碼頁}
@@ -174,10 +173,63 @@ from django.utils import timezone
 
 - polls/view.py 覆蓋 index
 
-- 增加 from .models import Question 讓view能拿到資料庫
+- (上面可以直接蓋) 增加 from .models import Question 讓view能拿到資料庫
+--------------------------------------------------------
+- 如果 404 error 去polls/views.py 改 def detail (直接覆蓋這部分)
 
-- 
+- polls/templates/polls/detail.html 再去polls開detail.html新檔 直接貼
+--------------------------------------------------------
 
-- 
+- 處理404步驟 (有需要再用)
+ 
+- polls/templates/polls/detail.html 覆蓋貼上
 
-- 
+- polls/urls.py 全部覆蓋
+
+- polls/templates/polls/index.html 
+  
+  在<ul>後 改成 <li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li> 止於{%endfor%}
+
+- [part4]
+
+- polls/templates/polls/detail.html 整個覆蓋
+
+- polls/views.py 上面覆蓋
+
+  def vote(request, question_id)這段以後全覆蓋
+
+--------------------------------
+ [找不到網頁時]
+ 
+- polls/views.py裡改 def results 這段覆蓋
+
+- polls/templates/polls/results.html 新增新檔results.html，並貼上
+
+- Amend URLconf 不用改
+
+- polls/views.py 上面覆蓋 (有包含from.models import choice, Question)
+
+- 把def vote(request, question_id): 前的覆蓋掉
+
+[part6]
+
+- polls/static/polbbls/style.css 新增資料夾貼上
+
+- polls/templates/polls/index.html 貼在最上面
+
+- polls/static/polls/style.css 最下面貼上
+
+- 找圖 set images
+
+- save in myproject / mysite /polls/stastic/polls (上面打back.img)
+
+- polls/static/polls/images 開images資料夾
+
+- 把圖放進images
+
+- polls/static/polls/style.css 改gif成jpg
+
+- polls/admin.py 整個覆蓋
+
+- j
+
