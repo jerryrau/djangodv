@@ -1,0 +1,237 @@
+so- sudo apt-get update 升級版本
+
+- sudo apt-get install python3-pip (安裝python3)
+
+- pip3 install --upgrade pip (更新pip3)
+
+- sudo pip3 install virtualenv (pip3安裝虛擬環境)
+
+- 到目錄新增myproject 再cd myproject
+
+- virtualenv VENV (myproject中開虛擬環境)--安裝package的地方
+
+- 在myproject中進入[source VENV/bin/activate} (抓檔案入虛擬環境)
+
+- pip install django 安裝django
+
+- 進入part1
+
+- django-admin startproject mysite 開project
+
+- cd mysite 
+
+- python manage.py startapp polls 開好新app polls
+
+- 去polls/view.py中改資料
+
+- polls中開一個 urls.py 貼上資料
+
+[這兩個不同]
+
+- mysite/urls.py 覆蓋資料 ，不用再動
+
+- python manage.py makemigrations
+
+- python manage.py migrate
+
+- python manage by runserver
+
+  [part 2]
+
+- polls/models.py 中貼上資料p
+- mysite/settings.py 中增加 'polls.apps.PollsConfig' [才能考慮polls]
+
+  [回碼頁}
+ 
+- crtl c 離開
+
+- python manage.py makemigrations
+
+- python manage.py migrate
+
+- python manage.py shell(用來新增資料)
+
+- from polls.models import Question, Choice  (導入剛寫模組)
+
+- from django.utils import timezone (抓"timezone"這個package)
+
+- q = Question(question_text="What's new?", pub_date=timezone.now()) 創造物件q [文字檔what's now 時間為現在時間]
+
+- q.save() 儲存
+
+- q.id (一定 = 1 此時只有 一個id)  
+
+----------------------------------------
+- 當q.id不為1，q = Question.objects.all() [把所有物件給q]
+
+- q.delete()
+----------------------------------------
+- q.question_text (跑文字)
+
+- q.pub_date (跑時間)
+
+- q.question_text = "What's up?" 改文字
+
+- q.save()
+
+- Question.objects.all() (列出物件名字)
+
+- polls/models.py中修改
+
+前段覆蓋
+
+[Question]後面加上 def __str__(self):
+         return self.question_text
+
+[Choice]後面加上 def __str__(self):
+         return self.choice_text
+
+- polls/models.py 中
+
+class Question最後面再加上
+
+ def was_published_recently(self):
+     return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+前段再覆蓋
+import datetime
+
+from django.db import models
+from django.utils import timezone
+
+- 離開
+
+- python manage.py makemigrations
+
+- python manage.py migrate
+
+- python manage.py shell
+
+- from polls.models import Question, Choice (再導入)
+
+- Question.objects.all() (物件名已改變,下列回傳了question名稱)
+
+  ps.  def __str__(self):
+        return self.question_text 
+
+- Question.objects.filter(id=1) 叫出id=1物件
+
+- from django.utils import timezone
+
+- current_year = timezone.now().year
+
+- Question.objects.get(pub_date__year=current_year) 
+
+  把等於現在這個年分物件叫出 current_year用系統(timezone.now)的方式把時間叫出，再去取他的年份，把question中發表日是2018的都找出
+
+- q = Question.objects.get(pk=1)
+
+- q.was_published_recently() 系統時間跟我給時間誤差是否在一天內
+
+- q = Question.objects.get(pk=1)
+
+- q.choice_set.all() 查question有沒有choice
+
+- q.choice_set.create(choice_text='Not much', votes=0)
+
+- q.choice_set.create(choice_text='The sky', votes=0)
+
+- c = q.choice_set.create(choice_text='Just hacking again', votes=0)
+
+  創三個choice
+
+- c.question 查choice對應的question
+
+- q.choice_set.all() question對應的choice
+
+- q.choice_set.count() 數量
+
+- Choice.objects.filter(question__pub_date__year=current_year)
+  
+  question date是今年的都抓出
+
+- c = q.choice_set.filter(choice_text__startswith='Just hacking')
+
+- c.delete()
+  抓出Just hacking開頭的刪掉
+
+- 離開
+
+- python manage.py createsuperuser
+
+- python manage.py runserver
+
+- http://127.0.0.1:8000/admin/
+
+- mysite/polls/admin
+
+- 覆蓋資料
+
+[part3]
+
+- polls/views.py 在def index (request)後增加三個funcion (非覆蓋)
+
+- polls/urls.py 增加三個超連結 [之後打開才能進去 注意第一個重疊] "可全覆蓋"
+
+- polls/view.py 改index funtion (覆蓋) 同時注意上面兩條funtions要正確
+
+- polls/templates/polls/index.html 新增資料夾，index.html貼上
+
+- 去升級template
+
+- polls/view.py 覆蓋 index
+
+- (上面可以直接蓋) 增加 from .models import Question 讓view能拿到資料庫
+
+- A shortcut:polls/views.py 覆蓋def index(request)
+--------------------------------------------------------
+- 如果 404 error 去polls/views.py 改 def detail (直接覆蓋這部分)
+
+- polls/templates/polls/detail.html 再去polls開detail.html新檔 直接貼
+--------------------------------------------------------
+- get_object_or_404() : polls/views.py 中 from django.shortcuts 這段置頂，修改 def detail
+
+- polls/templates/polls/detail.html 覆蓋貼上
+
+- polls/urls.py 全部覆蓋
+
+- polls/templates/polls/index.html 
+  
+  在<ul>後 改成 <li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li> 止於{%endfor%}
+
+- [part4]
+
+- polls/templates/polls/detail.html 整個覆蓋
+
+- polls/views.py 上面覆蓋
+
+  def vote(request, question_id)這段以後全覆蓋
+
+- polls/views.py裡改 def results 這段覆蓋
+
+- polls/templates/polls/results.html 新增新檔results.html，並貼上
+
+- Amend URLconf 不用改
+
+[part6]
+
+- polls/static/polbbls/style.css 新增資料夾貼上
+
+- polls/templates/polls/index.html 貼在最上面
+
+- polls/static/polls/style.css 最下面貼上
+
+- 找圖 set images
+
+- save in myproject / mysite /polls/stastic/polls (上面打background.img)
+
+- polls/static/polls/images 開images資料夾
+
+- 把圖放進images
+
+- polls/static/polls/style.css 改gif成jpg
+
+- polls/admin.py 整個覆蓋
+
+- j
+
